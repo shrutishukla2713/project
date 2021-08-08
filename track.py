@@ -6,9 +6,9 @@ class Track:
         self.url = "https://covid-19-tracking.p.rapidapi.com/v1"
 
         self.headers = {
-            'x-rapidapi-key': "ed7e61a0bcmsh8bac8fae8c7b448p16672ajsn2beb82b3a8d6",
-            'x-rapidapi-host': "covid-19-tracking.p.rapidapi.com"
-            }
+             'x-rapidapi-key': "d30c9b20a1mshf7b0cf45d9eb8c4p1b1d51jsn7724536d9cb5",
+             'x-rapidapi-host': "covid-19-tracking.p.rapidapi.com"
+             }
         
 
     def getResult(self):   
@@ -19,3 +19,11 @@ class Track:
         except Exception as e:
             return None
             print(e)
+
+    
+
+if __name__ == '__main__':
+    track = Track()
+    res = track.getResult()
+    print(res)
+        
