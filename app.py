@@ -1,4 +1,5 @@
 from google.protobuf import message
+from sqlalchemy.orm.session import Session
 import streamlit as st
 import pandas as pd
 import webbrowser
@@ -10,11 +11,14 @@ from sqlalchemy.orm import  sessionmaker
 from sqlalchemy import create_engine
 from database import Past_data
 
-engine = create_engine("sqlite:///Past_data.sqlite3")
-Session = sessionmaker(bind=engine)
-session = Session()
+# @st.cache()
+def createSession():
+        
+    engine = create_engine("sqlite:///Past_data.sqlite3")
+    Session = sessionmaker(bind=engine)
+    return Session()
 
-
+session = createSession()
 
 ## d_api=pd.read_csv('https://api.covid19india.org/csv/latest/state_wise.csv')
 
@@ -29,11 +33,13 @@ col1.image("covid_image.jfif")
 st.write("""Hello....
 
 This is my mini projectand this is based on COVID_19 Pendemic.     
-The virus associate with the outbreak originating in china,has been designated severe acute respiratory syndrome coroavirus2, The disease caused by that virus is now officially called COVID-19.
+The virus associate with the outbreak originating in china, has been designated severe acute respiratory syndrome coroavirus2, The disease caused by that virus is now officially called COVID-19.
 
 As of 27 July 2021, more than 194 million cases have been confirmed, with more than 4.17 million confirmed deaths attributed to COVID-19, making it one of the deadliest pandemics in history.
 
-So here we can see a stauts  or details of Covid_19 Pendemic  situation and We are also see a anaylsis of Covid_19 data.
+So here we can see a stauts  or details of Covid_19 Pendemic  situation, We are also see a Past data of Covid_19 data for further analysis and it is helps to us for understanding a  covid pendemic situations.
+
+We can also see a others  information links related covid 19 situation, news, vaccination, symptoms and prevents.
 """)
 
 col3,col4=st.beta_columns(2)
@@ -129,9 +135,9 @@ def View():
             st.error('something went wrong')
 
 
-    col2.image("coro_gif.gif")
+col2.image("coro_gif.gif")
     
-    st.markdown("""------------------------------------------------------------------------------------------""")
+st.markdown("""------------------------------------------------------------------------------------------""")
     
 
 def Past():
@@ -145,7 +151,18 @@ def Past():
     details = session.query(Past_data).all()
 
     for detail in details:
-        print(detail)
+        
+        st.markdown('#')
+        st.header('Country : '+detail.country)
+        st.markdown('---')
+        st.subheader('Last Update : '+str(detail.last_update))
+        st.subheader('New_cases :'+str(detail.new_cases))
+        st.subheader('New_Deaths :'+str(detail.new_Deaths))
+        st.subheader('Activ_cases :'+str(detail.active_cases))
+        st.subheader('Total_Recovered :'+str(detail.total_Recovered))
+        st.subheader('Total_Deaths :'+str(detail.total_Deaths))
+        st.subheader('Total_cases :'+str(detail.total_cases))
+
 
 
 
@@ -164,7 +181,7 @@ def analysis():
 
     def bar():
         st.title("Bar char of Dataset")
-
+    
 
     def line():
         st.title("Line chart of Dataset")
@@ -176,8 +193,8 @@ def analysis():
 
     def histo():
         st.title("Histogram chart of Dataset")
+        
 
-    
     def piec():
         st.title("Pie chart of Dataset")
 
@@ -201,7 +218,10 @@ def Co_news():
     st.markdown("""--------------------------------------------------------------------------------------------""")
     st.text("   ")
 
-    st.image('news.jpg')
+    col3,col4=st.beta_columns(2)
+    col3.image('news.jpg')
+    
+
     st.text("  ")
     url ='https://www.mygov.in/covid-19/'
     st.title(" Government officially news website  ...click here")
